@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int carFleet(int target, vector<int>& position, vector<int>& speed) {
+        vector<pair<int, int>> pair;
+        for (int i = 0; i < position.size(); i++) {
+            pair.push_back({position[i], speed[i]});
+        }
+        sort(pair.begin(), pair.end());
+        reverse(pair.begin(), pair.end());
+        std::vector<double> st;
+        st.push_back((double)(target - pair[0].first) / pair[0].second);
+        for (int i{1}; i < pair.size(); ++i) {
+            double time {(double)(target - pair[i].first) / pair[i].second};
+            while (st.size() && st.back() >= time) {
+                st.pop_back();
+            }
+            st.push_back(time);
+        }
+        while (st.size() > 1&& st.back() <= st[st.size() - 2]) {
+            st.pop_back();
+        }
+        
+        return st.size();
+    }
+};
