@@ -12,15 +12,23 @@
 
 class Solution {
 public:
-    TreeNode* invertTree(TreeNode* root) {
-        if (root == nullptr) {
-            return root;
+    int maxDepth(TreeNode* root) {
+        int sol{};
+        stack<pair<TreeNode*, int>> st;
+        if (root) {
+            st.push({root, 1});
         }
-        std::swap(root->left, root->right);
-        auto* left{invertTree(root->left)};
-        auto* right{invertTree(root->right)};
-        root->left = left;
-        root->right = right;
-        return root;
+        while (!st.empty()) {
+            auto [node, depth] = st.top();
+            st.pop();
+            sol = std::max(sol, depth);
+            if (node->left) {
+                st.push({node->left, depth + 1});
+            }
+            if (node->right) {
+                st.push({node->right, depth + 1});
+            }
+        }
+        return sol;
     }
 };
