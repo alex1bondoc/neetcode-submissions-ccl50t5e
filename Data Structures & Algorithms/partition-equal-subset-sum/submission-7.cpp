@@ -1,17 +1,17 @@
 class Solution {
-    std::vector<vector<int>> aux;
 public:
     bool canPartition(vector<int>& nums) {
-        int s = std::accumulate(nums.begin(), nums.end(), 0);
-        aux.resize(nums.size(), vector<int> (s / 2 + 1, -1));
-        if (s%2) return false;
-        return dp(nums, 0, 0, s / 2);
-    }
-    bool dp(vector<int>& nums, int i, int sum, int target) {
-        if (i == nums.size() && sum == target) return true;
-        if (i == nums.size() || sum > target) return false;
-        if (aux[i][sum] != -1) return aux[i][sum];
-        aux[i][sum] =  dp(nums, i + 1, sum + nums[i], target) || dp(nums, i + 1, sum, target);
-        return aux[i][sum];
+        int sum{accumulate(nums.begin(), nums.end(), 0)};
+        if (sum % 2) return false;
+        sum /= 2;
+        vector<int> dp(sum + 1);
+        dp[0] = 1;
+        for (int i{0}; i < sum; ++i) {
+            for (int j{}; j < nums.size(); ++j) {
+                if (i + nums[j] > sum) continue;
+                dp[i + nums[j]] = dp[i];
+            }
+        }
+        return dp[sum];
     }
 };
